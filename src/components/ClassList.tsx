@@ -2,7 +2,6 @@ import React from "react";
 import styled from "@emotion/styled";
 import { ClassComponent } from "./Class";
 import { CLASSES } from "../api/Classes/ClassList";
-import { LevelSelect } from "./LevelSelect";
 import { TalentWeightSelect } from "./TalentWeightSelect";
 
 const ClassListDiv = styled("div")`
@@ -11,7 +10,7 @@ const ClassListDiv = styled("div")`
   justify-content: center;
   width: 100%;
   flex: 1;
-  max-height: 200px;
+  max-height: 100px;
 `;
 
 const SelectWrapper = styled("div")`
@@ -23,7 +22,6 @@ export function ClassList() {
   return (
     <>
       <SelectWrapper>
-        <LevelSelect />
         <TalentWeightSelect />
       </SelectWrapper>
       <ClassListDiv>

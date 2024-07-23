@@ -1,51 +1,53 @@
 import { Class } from "./Class";
-import DeathKnight from "../../assets/DeathKnight/DeathKnight.jpg";
-import Blood from "../../assets/DeathKnight/Blood.jpg";
-import Unholy from "../../assets/DeathKnight/Unholy.jpg";
-import FrostDeathKnight from "../../assets/DeathKnight/Frost-DeathKnight.jpg";
-import BloodTalentBackground from "../../assets/DeathKnight/Blood-TalentBackground.jpg"
-import FrostDKTalentBackground from "../../assets/DeathKnight/Frost-TalentBackground.jpg"
-import UnholyTalentBackground from "../../assets/DeathKnight/Unholy-TalentBackground.jpg"
-import DemonHunter from "../../assets/DemonHunter/DemonHunter.jpg";
-import Havoc from "../../assets/DemonHunter/Havoc.jpg";
-import Vengeance from "../../assets/DemonHunter/Vengeance.jpg";
-import HavocTalentBackground from "../../assets/DemonHunter/Havoc-TalentBackground.jpg"
-import VengeanceTalentBackground from "../../assets/DemonHunter/Vengeance-TalentBackground.jpg"
+import DeathKnight from "../../assets/Death Knight/DeathKnight.jpg";
+import Blood from "../../assets/Death Knight/Blood.jpg";
+import Unholy from "../../assets/Death Knight/Unholy.jpg";
+import FrostDeathKnight from "../../assets/Death Knight/Frost-DeathKnight.jpg";
+import BloodTalentBackground from "../../assets/Death Knight/Blood-TalentBackground.jpg";
+import FrostDKTalentBackground from "../../assets/Death Knight/Frost-TalentBackground.jpg";
+import UnholyTalentBackground from "../../assets/Death Knight/Unholy-TalentBackground.jpg";
+import DemonHunter from "../../assets/Demon Hunter/DemonHunter.jpg";
+import Havoc from "../../assets/Demon Hunter/Havoc.jpg";
+import Vengeance from "../../assets/Demon Hunter/Vengeance.jpg";
+import HavocTalentBackground from "../../assets/Demon Hunter/Havoc-TalentBackground.jpg";
+import VengeanceTalentBackground from "../../assets/Demon Hunter/Vengeance-TalentBackground.jpg";
 import Druid from "../../assets/Druid/Druid.jpg";
 import Feral from "../../assets/Druid/Feral.jpg";
 import Balance from "../../assets/Druid/Balance.jpg";
 import Guardian from "../../assets/Druid/Guardian.jpg";
 import RestorationDruid from "../../assets/Druid/Restoration-Druid.jpg";
-import FeralTalentBackground from "../../assets/Druid/Feral-TalentBackground.jpg"
-import BalanceTalentBackground from "../../assets/Druid/Balance-TalentBackground.jpg"
-import GuardianTalentBackground from "../../assets/Druid/Guardian-TalentBackground.jpg"
-import RestoDruidTalentBackground from "../../assets/Druid/Restoration-TalentBackground.jpg"
+import FeralTalentBackground from "../../assets/Druid/Feral-TalentBackground.jpg";
+import BalanceTalentBackground from "../../assets/Druid/Balance-TalentBackground.jpg";
+import GuardianTalentBackground from "../../assets/Druid/Guardian-TalentBackground.jpg";
+import RestoDruidTalentBackground from "../../assets/Druid/Restoration-TalentBackground.jpg";
 import Evoker from "../../assets/Evoker/Evoker.jpg";
 import Devastation from "../../assets/Evoker/Devastation.jpg";
 import Preservation from "../../assets/Evoker/Preservation.jpg";
-import DevastationTalentBackground from "../../assets/Evoker/Devastation-TalentBackground.jpg"
-import PreservationTalentBackground from "../../assets/Evoker/Preservation-TalentBackground.jpg"
+import Augmentation from "../../assets/Evoker/Augmentation.jpg";
+import DevastationTalentBackground from "../../assets/Evoker/Devastation-TalentBackground.jpg";
+import PreservationTalentBackground from "../../assets/Evoker/Preservation-TalentBackground.jpg";
+import AugmentationTalentBackground from "../../assets/Evoker/Augmentation-TalentBackground.jpg";
 import Hunter from "../../assets/Hunter/Hunter.jpg";
 import BeastMastery from "../../assets/Hunter/BeastMastery.jpg";
 import Marksmanship from "../../assets/Hunter/Marksmanship.jpg";
 import Survival from "../../assets/Hunter/Survival.jpg";
-import BMTalentBackground from "../../assets/Hunter/BM-TalentBackground.jpg"
-import MMTalentBackground from "../../assets/Hunter/MM-TalentBackground.jpg"
-import SurvivalTalentBackground from "../../assets/Hunter/Survival-TalentBackground.jpg"
+import BMTalentBackground from "../../assets/Hunter/BM-TalentBackground.jpg";
+import MMTalentBackground from "../../assets/Hunter/MM-TalentBackground.jpg";
+import SurvivalTalentBackground from "../../assets/Hunter/Survival-TalentBackground.jpg";
 import Mage from "../../assets/Mage/Mage.jpg";
 import Arcane from "../../assets/Mage/Arcane.jpg";
 import Fire from "../../assets/Mage/Fire.jpg";
 import FrostMage from "../../assets/Mage/Frost-Mage.jpg";
-import ArcaneTalentBackground from "../../assets/Mage/Arcane-TalentBackground.jpg"
-import FireTalentBackground from "../../assets/Mage/Fire-TalentBackground.jpg"
-import FrostMageTalentBackground from "../../assets/Mage/Frost-TalentBackground.jpg"
+import ArcaneTalentBackground from "../../assets/Mage/Arcane-TalentBackground.jpg";
+import FireTalentBackground from "../../assets/Mage/Fire-TalentBackground.jpg";
+import FrostMageTalentBackground from "../../assets/Mage/Frost-TalentBackground.jpg";
 import Monk from "../../assets/Monk/Monk.jpg";
 import Brewmaster from "../../assets/Monk/Brewmaster.jpg";
 import Windwalker from "../../assets/Monk/Windwalker.jpg";
 import Mistweaver from "../../assets/Monk/Mistweaver.jpg";
 import BrewmasterTalentBackground from "../../assets/Monk/Brewmaster-TalentBackground.jpg";
 import MistweaverTalentBackground from "../../assets/Monk/Mistweaver-TalentBackground.jpg";
-import WindwalkerTalentBackground from "../../assets/Monk/Windwalker-TalentBackground.jpg"
+import WindwalkerTalentBackground from "../../assets/Monk/Windwalker-TalentBackground.jpg";
 import Paladin from "../../assets/Paladin/Paladin.jpg";
 import ProtectionPaladin from "../../assets/Paladin/Protection-Paladin.jpg";
 import Retribution from "../../assets/Paladin/Retribution.jpg";
@@ -92,6 +94,7 @@ import FuryTalentBackground from "../../assets/Warrior/Fury-TalentBackground.jpg
 export const CLASSES: Class[] = [
   {
     id: 6,
+    talentTreeId: 750,
     name: "Death Knight",
     image: DeathKnight,
     specs: [
@@ -117,6 +120,7 @@ export const CLASSES: Class[] = [
   },
   {
     id: 12,
+    talentTreeId: 854,
     name: "Demon Hunter",
     image: DemonHunter,
     specs: [
@@ -136,6 +140,7 @@ export const CLASSES: Class[] = [
   },
   {
     id: 11,
+    talentTreeId: 793,
     name: "Druid",
     image: Druid,
     specs: [
@@ -167,6 +172,7 @@ export const CLASSES: Class[] = [
   },
   {
     id: 13,
+    talentTreeId: 872,
     name: "Evoker",
     image: Evoker,
     specs: [
@@ -182,11 +188,18 @@ export const CLASSES: Class[] = [
         specIcon: Preservation,
         talentBackground: PreservationTalentBackground
       },
+      {
+        name: "Augmentation",
+        id: 1473,
+        specIcon: Augmentation,
+        talentBackground: AugmentationTalentBackground
+      }
     ],
   },
   {
     id: 3,
     name: "Hunter",
+    talentTreeId: 774,
     image: Hunter,
     specs: [
       {
@@ -211,6 +224,7 @@ export const CLASSES: Class[] = [
   },
   {
     id: 8,
+    talentTreeId: 658,
     name: "Mage",
     image: Mage,
     specs: [
@@ -236,6 +250,7 @@ export const CLASSES: Class[] = [
   },
   {
     id: 10,
+    talentTreeId: 781,
     name: "Monk",
     image: Monk,
     specs: [
@@ -261,6 +276,7 @@ export const CLASSES: Class[] = [
   },
   {
     id: 2,
+    talentTreeId: 790,
     name: "Paladin",
     image: Paladin,
     specs: [
@@ -286,6 +302,7 @@ export const CLASSES: Class[] = [
   },
   {
     id: 5,
+    talentTreeId: 795,
     name: "Priest",
     image: Priest,
     specs: [
@@ -311,6 +328,7 @@ export const CLASSES: Class[] = [
   },
   {
     id: 4,
+    talentTreeId: 852,
     name: "Rogue",
     image: Rogue,
     specs: [
@@ -336,6 +354,7 @@ export const CLASSES: Class[] = [
   },
   {
     id: 7,
+    talentTreeId: 786,
     name: "Shaman",
     image: Shaman,
     specs: [
@@ -361,6 +380,7 @@ export const CLASSES: Class[] = [
   },
   {
     id: 9,
+    talentTreeId: 720,
     name: "Warlock",
     image: Warlock,
     specs: [
@@ -386,6 +406,7 @@ export const CLASSES: Class[] = [
   },
   {
     id: 1,
+    talentTreeId: 850,
     name: "Warrior",
     image: Warrior,
     specs: [

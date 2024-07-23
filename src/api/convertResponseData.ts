@@ -1,14 +1,29 @@
 import { TalentNode } from "../components/TalentTrees/TalentNode";
+import { getAndDownloadImage } from "./getAndDownloadImage";
+
+export interface RestrictionLine {
+  is_for_class: boolean;
+  required_points: number;
+  restricted_row: number;
+}
+
+interface PlayableClass {
+  id: number;
+  name: string;
+}
+
+interface PlayableSpecialization {
+  id: number;
+  name: string;
+}
 
 export interface ResponseData {
-  class: string;
-  classSpentPoints: number;
-  class_talents: TalentData;
-  spec: string;
-  specSpentPoints: number;
-  specLow: [number, number];
-  spec_talents: TalentData;
-  totalPoints: number;
+  class_talent_nodes: TalentData[];
+  spec_talent_nodes: TalentData[];
+  restriction_lines: RestrictionLine[];
+  id: number;
+  playable_class: PlayableClass;
+  playable_specialization: PlayableSpecialization;
 }
 
 interface Tooltip {
@@ -22,7 +37,7 @@ interface Tooltip {
         href: string;
       };
       name: string;
-    }
+    };
   };
   talent: {
     id: number;
@@ -30,33 +45,37 @@ interface Tooltip {
       href: string;
     };
     name: string;
-  }
+  };
 }
 
 interface TalentRank {
   rank: number;
-  tooltip: Tooltip
+  default_points: number;
+  tooltip: Tooltip;
 }
 
 interface ChoiceTalent {
-  choice_of_tooltips: [Tooltip, Tooltip]
+  choice_of_tooltips: [Tooltip, Tooltip];
 }
 
 export interface TalentData {
-  [talentId: string]: {
-    display_col: number;
-    display_row: number;
+  display_col: number;
+  display_row: number;
+  id: number;
+  locked_by: number[];
+  node_type: {
     id: number;
-    image_urls: [string];
-    locked_by: number[];
-    node_type: {
-      id: number;
-      type: "ACTIVE" | "PASSIVE";
-    };
-    rank: number;
-    ranks: TalentRank[] | ChoiceTalent[];
-    unlocks: number[];
+    type: "ACTIVE" | "PASSIVE";
   };
+  ranks: TalentRank[] | ChoiceTalent[];
+  unlocks?: number[];
+  isClassTalent: boolean;
+  choiceNode: boolean;
+}
+
+export interface Connections {
+  from: TalentNode;
+  to: TalentNode;
 }
 
 export interface Talents {
@@ -69,39 +88,75 @@ function isChoiceNode(node: ChoiceTalent | TalentRank): node is ChoiceTalent {
 }
 
 export function convertTalentDataToTalentNode(
-  talentData: TalentData,
+  talentData: TalentData[],
+  id: number,
+  isClassTalent: boolean,
 ): TalentNode[] {
-  return Object.keys(talentData).map((key) => {
-    const currTalentData = talentData[key];
-    const normalizedRank = currTalentData.rank - 1 < 0 ? 0 : currTalentData.rank - 1;
-    let name;
-    let description;
-    let node = currTalentData.ranks[normalizedRank];
-    let type: TalentNode["type"];
-    if (isChoiceNode(node)) {
-      const choiceTalent = node.choice_of_tooltips[Math.floor(Math.random()*2)]
-      name = choiceTalent.talent.name;
-      description = choiceTalent.spell_tooltip.description;
-      type = choiceTalent.spell_tooltip.cast_time.toLowerCase() === "passive" ? "passive" : "active";
-    } else {
-      description = node.tooltip.spell_tooltip.description
-      name = node.tooltip.talent.name;
-      type = currTalentData.node_type.type.toLowerCase() as TalentNode["type"];
-    }
+  return talentData
+    .map((talent) => {
+      if (!talent.ranks || talent.ranks.length === 0) {
+        // Skip this talent if ranks do not exist or are empty
+        return null;
+      }
 
-    const talentNode: TalentNode = {
-      id: currTalentData.id,
-      name,
-      description,
-      image: currTalentData.image_urls[0],
-      type,
-      rank: currTalentData.rank,
-      totalRanks: currTalentData.ranks.length,
-      lockedBy: currTalentData.locked_by,
-      unlocks: currTalentData.unlocks,
-      row: currTalentData.display_row,
-      column: currTalentData.display_col,
-    };
-    return talentNode;
-  });
+      let name;
+      let description;
+      let node = talent.ranks[talent.ranks.length - 1];
+      let type: TalentNode["type"];
+      let row = talent.display_row;
+      let spellId;
+      let rank = 0;
+      let choiceNode = false;
+      let choiceIndex = 0;
+      let isDefaultNode = false;
+
+      if (isChoiceNode(node)) {
+        const choiceIndex = Math.floor(Math.random() * 2)
+        const choiceTalent =
+          node.choice_of_tooltips[choiceIndex];
+        name = choiceTalent.talent.name;
+        description = choiceTalent.spell_tooltip.description;
+        type =
+          choiceTalent.spell_tooltip.cast_time.toLowerCase() === "passive"
+            ? "passive"
+            : "active";
+        spellId = choiceTalent.spell_tooltip.spell.id;
+        choiceNode = true;
+        choiceIndex
+      } else {
+        description = node.tooltip.spell_tooltip.description;
+        name = node.tooltip.talent.name;
+        type = talent.node_type.type.toLowerCase() as TalentNode["type"];
+        spellId = node.tooltip.spell_tooltip.spell.id;
+        if (node.default_points) {
+          rank = node.default_points;
+          isDefaultNode = true;
+        }
+      }
+
+      // for some reason, Evoker has display_row start at 4
+      if (id === 872) {
+        row = row - 3;
+      }
+
+      const talentNode: TalentNode = {
+        id: talent.id,
+        name,
+        description,
+        type,
+        totalRanks: talent.ranks.length,
+        rank,
+        lockedBy: talent.locked_by,
+        unlocks: talent.unlocks || [],
+        row,
+        column: talent.display_col,
+        spellId,
+        isClassTalent,
+        choiceNode,
+        choiceIndex,
+        isDefaultNode,
+      };
+      return talentNode;
+    })
+    .filter((talentNode) => talentNode !== null) as TalentNode[]; // Filter out null values
 }

@@ -7,12 +7,11 @@ import {
   TooltipProps,
   tooltipClasses,
   ButtonBase,
-  Menu,
-  TextField,
+  Menu
 } from "@mui/material";
 import { CLASSES } from "../api/Classes/ClassList";
 import { Specialization } from "../api/Specializations/Specialization";
-import { SpecializationDropwdownItem } from "./SpecializationDropdownItem";
+import { SpecializationDropdownItem } from "./SpecializationDropdownItem";
 import { ClassColors } from "./classColors";
 import { useClassAndSpec } from "./ClassAndSpecContext/ClassAndSpecContext";
 
@@ -108,7 +107,7 @@ export function ClassComponent(props: ClassProps) {
       >
         {currentClassSpecs.map((specialization) => {
           return (
-            <SpecializationDropwdownItem
+            <SpecializationDropdownItem
               onClick={handleClose}
               specialization={specialization}
               key={specialization.name}

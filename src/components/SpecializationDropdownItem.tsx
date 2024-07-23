@@ -20,7 +20,7 @@ const CustomMenuItem = styled(MenuItem)`
   column-gap: 8px;
 `;
 
-export function SpecializationDropwdownItem(
+export function SpecializationDropdownItem(
   props: SpecializationDropdownItemProps
 ) {
   return (

@@ -7,6 +7,7 @@ import { TalentTree } from "./components/TalentTrees/TalentTree";
 import styled from "@emotion/styled";
 import { ClassAndSpecContextProvider } from "./components/ClassAndSpecContext/ClassAndSpecContext";
 import { TalentWeightContextProvider } from "./components/TalentWeightContext";
+import { TalentTreesProvider } from "./api/talentTrees";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,23 +28,27 @@ const AppWrapper = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
+  row-gap: 20px;
   flex-wrap: wrap;
   height: 100%;
+  position: relative;
 `;
 
 function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <QueryClientProvider client={queryClient}>
-        <ClassAndSpecContextProvider>
-          <TalentWeightContextProvider>
-            <CssBaseline />
-            <AppWrapper>
-              <ClassList />
-              <TalentTree />
-            </AppWrapper>
-          </TalentWeightContextProvider>
-        </ClassAndSpecContextProvider>
+        <TalentTreesProvider>
+          <ClassAndSpecContextProvider>
+            <TalentWeightContextProvider>
+              <CssBaseline />
+              <AppWrapper>
+                <ClassList />
+                <TalentTree />
+              </AppWrapper>
+            </TalentWeightContextProvider>
+          </ClassAndSpecContextProvider>
+        </TalentTreesProvider>
       </QueryClientProvider>
     </ThemeProvider>
   );

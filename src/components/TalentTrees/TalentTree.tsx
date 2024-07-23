@@ -1,15 +1,19 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Node } from "./Node";
 import { TalentNode } from "./TalentNode";
 import { useClassAndSpec } from "../ClassAndSpecContext/ClassAndSpecContext";
-import { fetchTalentRandomizer } from "../../api/TalentRandomizer";
-import { useQuery } from "@tanstack/react-query";
+import { useFetchTalents } from "../../api/useFetchTalents";
 import Alert from "@mui/material/Alert";
-import { buildPointsAvailable } from "../../api/totalPointsAvailable";
 import { useTalentWeight } from "../TalentWeightContext";
 import { TalentTreeSkeleton } from "./TalentTreeSkeleton";
+import { Connections } from "../../api/convertResponseData";
+import { Arrow } from "./Arrow";
+import { Button } from "@mui/material";
+import Shuffle from "@mui/icons-material/Shuffle";
+import IosShareIcon from "@mui/icons-material/IosShare";
+import { exportTalentTree } from "../../api/exportTalentTree";
 
 interface TalentTreeWrapperProps {
   talentBackground?: string;
@@ -18,10 +22,18 @@ interface TalentTreeWrapperProps {
 const TalentTreeWrapper = styled("div", {
   shouldForwardProp: (propName) => propName !== "talentBackground",
 })<TalentTreeWrapperProps>`
-  width: 100%;
+  width: 95%;
+  align-self: center;
   flex: 3;
   background: url(${(props) => props.talentBackground}) no-repeat;
   background-size: 100% 100%;
+  position: relative;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 10px;
 `;
 
 const TalentGrid = styled(Grid)`
@@ -32,7 +44,7 @@ const TalentGrid = styled(Grid)`
 const AlertWrapper = styled.div`
   flex: 3;
   margin: auto;
-`
+`;
 
 const StyledAlert = styled(Alert)`
   padding: 12px 32px;
@@ -64,73 +76,161 @@ function getMaxColumnAndRow(data: [TalentNode[], TalentNode[]]) {
   };
 }
 
+interface GridAndConnections {
+  grid: Array<Array<number | TalentNode>>;
+  connections: Connections[];
+}
+
 function buildGrid(
   maxRow: number,
   maxColumn: number,
   data: [TalentNode[], TalentNode[]]
-): Array<Array<number | TalentNode>> {
+): GridAndConnections {
   const grid = [...Array(maxRow)].map((e) => Array(maxColumn).fill(0));
+  const connections: Connections[] = [];
+
   data[0].forEach((node) => {
-    grid[node.row-1][node.column-1] = node;
+    grid[node.row - 1][node.column - 1] = node;
+    node.unlocks.forEach((unlockId) => {
+      const childNode =
+        data[0].find((n) => n.id === unlockId) ||
+        data[1].find((n) => n.id === unlockId);
+      if (childNode) {
+        connections.push({ from: node, to: childNode });
+      }
+    });
   });
+
   data[1].forEach((node) => {
-    grid[node.row-1][node.column-1] = node;
+    grid[node.row - 1][node.column - 1] = node;
+    node.unlocks.forEach((unlockId) => {
+      const childNode =
+        data[0].find((n) => n.id === unlockId) ||
+        data[1].find((n) => n.id === unlockId);
+      if (childNode) {
+        connections.push({ from: node, to: childNode });
+      }
+    });
   });
-  return grid;
+
+  return { grid, connections };
 }
 
-// function buildArrowsFromGrid(grid: Array<Array<number | TalentNode>>) {
-//   console.log(grid);
-// }
-
 export function TalentTree() {
-  const { currentClass, currentSpec, classLevel } = useClassAndSpec();
+  const { currentClass, currentSpec } = useClassAndSpec();
   const { talentWeight } = useTalentWeight();
-  const pointsAvailable = useMemo(() => buildPointsAvailable(), []);
-  const { data, isFetching } = useQuery(
-    ["talentRandomizer", currentClass?.name, currentSpec?.name, talentWeight, classLevel],
-    () => fetchTalentRandomizer(currentClass?.name, currentSpec?.name, pointsAvailable[classLevel].classPoints, pointsAvailable[classLevel].specPoints, talentWeight),
-    {
-      enabled: !!currentClass && !!currentSpec,
+  const { classTalents, specTalents } = useFetchTalents(currentClass?.id, currentSpec?.id, talentWeight);
+
+  const [cellDimensions, setCellDimensions] = useState({ width: 0, height: 0 });
+  const measureRef = (node: HTMLDivElement) => {
+    if (
+      node !== null &&
+      cellDimensions.width === 0 &&
+      cellDimensions.height === 0
+    ) {
+      const { offsetWidth, offsetHeight } = node;
+      setCellDimensions({ width: offsetWidth, height: offsetHeight });
     }
-  );
-  if (isFetching) {
-    return (
-      <TalentTreeSkeleton />
-    )
-  }
-  if (!data) {
+  };
+
+  useEffect(() => {
+    setCellDimensions({ width: 0, height: 0 });
+  }, [currentClass, currentSpec]);
+
+  if (!currentClass || !currentSpec) {
     return (
       <AlertWrapper>
-        <StyledAlert severity="info">Please choose a specialization above to randomize!</StyledAlert>
+        <StyledAlert severity="info">
+          Please choose a specialization above to randomize!
+        </StyledAlert>
       </AlertWrapper>
-    )
+    );
   }
-  const maxColAndRow = getMaxColumnAndRow([data.classTalents, data.specTalents]);
-  const talentsGrid = buildGrid(maxColAndRow.maxRow, maxColAndRow.maxColumn, [data.classTalents, data.specTalents]);
-  // buildArrowsFromGrid(talentsGrid);
+
+  if (classTalents.length === 0 || specTalents.length === 0) {
+    return <TalentTreeSkeleton />;
+  }
+
+  const maxColAndRow = getMaxColumnAndRow([
+    classTalents,
+    specTalents,
+  ]);
+  const { grid, connections } = buildGrid(
+    maxColAndRow.maxRow,
+    maxColAndRow.maxColumn,
+    [classTalents, specTalents]
+  );
   return (
-    <TalentTreeWrapper talentBackground={currentSpec?.talentBackground}>
-      <TalentGrid container columns={maxColAndRow.maxColumn}>
-        {
-          talentsGrid.map((row) => {
+    <>
+      <ButtonWrapper>
+        <Button
+          variant="contained"
+          // onClick={() => refetch()}
+          startIcon={<Shuffle />}
+        >
+          Re-randomize Talents
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() =>
+            exportTalentTree(
+              [...classTalents, ...specTalents],
+              currentSpec.id
+            )
+          }
+          startIcon={<IosShareIcon />}
+        >
+          Export Talents
+        </Button>
+      </ButtonWrapper>
+      <TalentTreeWrapper talentBackground={currentSpec.talentBackground}>
+        <TalentGrid container columns={maxColAndRow.maxColumn}>
+          {grid.map((row) => {
             return row.map((col, ind) => {
               if (typeof col === "number") {
                 return (
-                  <Grid display="flex" justifyContent="center" alignItems="center" key={`class_${col}${ind}`} xs={1}>
+                  <Grid
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    key={`class_${col}${ind}`}
+                    xs={1}
+                  >
                     <div></div>
                   </Grid>
-                )
+                );
               }
               return (
-                <Grid display="flex" justifyContent="center" alignItems="center" key={`class_${col.id}`} xs={1}>
-                  <Node node={col} />
+                <Grid
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  key={`class_${col.id}`}
+                  xs={1}
+                  ref={measureRef}
+                >
+                  <Node
+                    node={col}
+                    className={currentClass.name}
+                    specName={currentSpec.name}
+                  />
                 </Grid>
-              )
+              );
             });
-          })
-        }
-      </TalentGrid>
-    </TalentTreeWrapper>
+          })}
+          {connections.map((connection, index) => {
+            return (
+              <Arrow
+                key={index}
+                from={connection.from}
+                to={connection.to}
+                gridCellHeight={cellDimensions.height}
+                gridCellWidth={cellDimensions.width}
+              />
+            );
+          })}
+        </TalentGrid>
+      </TalentTreeWrapper>
+    </>
   );
 }
