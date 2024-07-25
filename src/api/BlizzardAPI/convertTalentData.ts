@@ -8,7 +8,7 @@ function isChoiceNode(node: ChoiceTalent | TalentRank): node is ChoiceTalent {
  * Converts an array of talent data into an array of talent nodes.
  *
  * @param talentData - An array of talent data to be converted.
- * @param id - The identifier for the talent tree or class.
+ * @param id - The identifier for the talent tree.
  * @param isClassTalent - A boolean indicating if the talents are class talents.
  * @returns An array of TalentNode objects representing the converted talent data.
  */
