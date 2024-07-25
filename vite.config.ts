@@ -1,24 +1,25 @@
-import { defineConfig } from 'vitest/config'
-import react from '@vitejs/plugin-react-swc'
+import { defineConfig } from "vitest/config";
+import react from "@vitejs/plugin-react-swc";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/',
+  base: "/",
   server: {
     open: true,
-    port: 3000
+    port: 3000,
   },
-  plugins: [react()],
+  plugins: [react(), nodePolyfills()],
   test: {
     globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/setupTests.ts',
+    environment: "jsdom",
+    setupFiles: "./src/setupTests.ts",
     css: true,
-    reporters: ['verbose'],
+    reporters: ["verbose"],
     coverage: {
-      reporter: ['text', 'json', 'html'],
-      include: ['src/**/*'],
+      reporter: ["text", "json", "html"],
+      include: ["src/**/*"],
       exclude: [],
-    }
+    },
   },
-})
+});
