@@ -37,7 +37,16 @@ function useFetchTalents(
     const { spec_talent_nodes, class_talent_nodes, restriction_lines, id } =
       talentTrees[classId][specId];
 
-    console.log(class_talent_nodes);
+    let restrictions = restriction_lines;
+    // for some reason, Evoker has display_row start at 4, so we need to account for that in restriction lines too
+    if (classId === 13) {
+      restrictions = restriction_lines.map((restr) => {
+        return {
+          ...restr,
+          restricted_row: restr.restricted_row - 3
+        }
+      })
+    }
 
     const convertedClassTalents = convertTalentData(
       class_talent_nodes,
@@ -52,17 +61,16 @@ function useFetchTalents(
 
     const randomizedClassTalents = randomizeTalents(
       convertedClassTalents,
-      restriction_lines,
+      restrictions,
       weighting,
       true
     );
     const randomizedSpecTalents = randomizeTalents(
       convertedSpecTalents,
-      restriction_lines,
+      restrictions,
       weighting,
       false
     );
-    console.log(randomizedClassTalents);
 
     setTalents({
       classTalents: randomize ? randomizedClassTalents : convertedClassTalents,

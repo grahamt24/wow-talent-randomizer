@@ -66,9 +66,11 @@ function Node(props: NodeProps) {
         passive={props.node.type === "passive"}
         maxRank={props.node.rank === props.node.totalRanks}
       >
-        <MaxRankPointsSpan>
-          {props.node.rank} / {props.node.totalRanks}
-        </MaxRankPointsSpan>
+        {!props.node.isDefaultNode && (
+          <MaxRankPointsSpan>
+            {props.node.rank} / {props.node.totalRanks}
+          </MaxRankPointsSpan>
+        )}
       </SelectedTalentButton>
     </Tooltip>
   );

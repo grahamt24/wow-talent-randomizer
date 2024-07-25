@@ -20,13 +20,12 @@ async function getAndDownloadImage(
   specName?: string
 ) {
   try {
-    const response = await axios.post("http://localhost:3001/download-image", {
+    await axios.post("http://localhost:3001/download-image", {
       url,
       accessToken,
       className,
       specName,
     });
-    console.log(response.data.message);
   } catch (error) {
     console.error("Error:", (error as Error).message);
   }
