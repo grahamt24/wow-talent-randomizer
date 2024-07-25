@@ -16,11 +16,6 @@ function canBeUnlocked(
   restrictionLines: RestrictionLine[],
   pointsSpent: number
 ): boolean {
-  // If the talent is not locked by any other talents, it can be unlocked
-  if (talent.lockedBy === undefined || talent.lockedBy.length === 0) {
-    return true;
-  }
-
   // Check if there are any restrictions based on the current points spent and talent row
   const isRestricted = restrictionLines.some(
     (line) =>
@@ -43,6 +38,11 @@ function canBeUnlocked(
   // If a partially selected talent is blocking, this talent cannot be unlocked
   if (isPartiallySelectedBlocking) {
     return false;
+  }
+
+  // If the talent is not locked by any other talents, it can be unlocked
+  if (talent.lockedBy === undefined || talent.lockedBy.length === 0) {
+    return true;
   }
 
   // Finally, check if this talent is locked by any of the selected talents
@@ -104,9 +104,9 @@ function randomizeTalents(
 ) {
   const rng = seedrandom();
   const totalPoints = isClassTree ? 31 : 30; // Adjust total points based on tree type
-  let pointsSpent = isClassTree ? 1 : 0; // Start with 1 point spent if it's a class tree
-  const defaultTalent = talents.find((talent) => talent.rank > 0);
-  const selectedTalents: TalentNode[] = isClassTree ? [defaultTalent!] : [];
+  let pointsSpent = 0;
+  const defaultTalents = talents.filter((talent) => talent.isDefaultNode);
+  const selectedTalents: TalentNode[] = isClassTree ? [...defaultTalents] : [];
 
   while (pointsSpent < totalPoints) {
     const availableTalents = talents.filter((talent) => {
