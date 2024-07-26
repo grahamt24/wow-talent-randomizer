@@ -8,7 +8,6 @@ interface TalentTrees {
 
 interface TalentTreesContextType {
   talentTrees: TalentTrees;
-  loading: boolean;
 }
 
 export type { TalentTrees, TalentTreesContextType };

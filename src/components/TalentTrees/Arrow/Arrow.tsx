@@ -18,6 +18,7 @@ function Arrow({ from, to, gridCellHeight, gridCellWidth }: ArrowProps) {
         pointerEvents: "none",
         overflow: "visible",
       }}
+      data-testid="arrow"
     >
       <line
         x1={fromX}
@@ -26,6 +27,7 @@ function Arrow({ from, to, gridCellHeight, gridCellWidth }: ArrowProps) {
         y2={toY}
         stroke={strokeColor}
         strokeWidth="2"
+        data-testid="arrow-line"
       />
     </svg>
   );

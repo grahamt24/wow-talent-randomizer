@@ -8,14 +8,12 @@ import { TalentTreesContext } from "./constants";
 
 const TalentTreesProvider = ({ children }: { children: React.ReactNode }) => {
   const [talentTrees, setTalentTrees] = useState<TalentTrees>({});
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAllTalentTrees = async () => {
       const storedTalentTrees = localStorage.getItem("talentTreesData");
       if (storedTalentTrees) {
         setTalentTrees(JSON.parse(storedTalentTrees));
-        setLoading(false);
         return;
       }
       const accessToken = await retrieveAccessToken();
@@ -44,14 +42,13 @@ const TalentTreesProvider = ({ children }: { children: React.ReactNode }) => {
 
       localStorage.setItem("talentTreesData", JSON.stringify(talentTreesData));
       setTalentTrees(talentTreesData);
-      setLoading(false);
     };
 
     fetchAllTalentTrees();
   }, []);
 
   return (
-    <TalentTreesContext.Provider value={{ talentTrees, loading }}>
+    <TalentTreesContext.Provider value={{ talentTrees }}>
       {children}
     </TalentTreesContext.Provider>
   );

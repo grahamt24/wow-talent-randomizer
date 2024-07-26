@@ -1,5 +1,5 @@
 import React from "react";
-import { ClassSelect } from "../ClassSelect/ClassSelect";
+import { ClassSelect } from "./ClassSelect/ClassSelect";
 import { CLASSES } from "../../api/WorldOfWarcraftClasses/constants";
 import { TalentWeightSelect } from "./TalentWeight/TalentWeightSelect";
 import { ClassListWrapper, SelectWrapper } from "./styles";
