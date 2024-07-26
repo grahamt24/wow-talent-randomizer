@@ -28,13 +28,14 @@ function TalentTree() {
 
   const [cellDimensions, setCellDimensions] = useState({ width: 0, height: 0 });
   const measureRef = (node: HTMLDivElement) => {
-    if (
-      node !== null &&
-      cellDimensions.width === 0 &&
-      cellDimensions.height === 0
-    ) {
+    if (node !== null) {
       const { offsetWidth, offsetHeight } = node;
-      setCellDimensions({ width: offsetWidth, height: offsetHeight });
+      if (
+        cellDimensions.width !== offsetWidth ||
+        cellDimensions.height !== offsetHeight
+      ) {
+        setCellDimensions({ width: offsetWidth, height: offsetHeight });
+      }
     }
   };
 
@@ -73,6 +74,7 @@ function TalentTree() {
         >
           Re-randomize Talents
         </Button>
+        {/** TODO: Add export button and finish up export talent logic */}
       </ButtonWrapper>
       <TalentTreeWrapper talentBackground={currentSpec.talentBackground}>
         <TalentGrid container columns={maxColAndRow.maxColumn}>

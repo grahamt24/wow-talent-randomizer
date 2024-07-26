@@ -1,4 +1,4 @@
-import { Specialization } from "../../../api/WorldOfWarcraftSpecializations/types";
+import { Specialization } from "../../../../api/WorldOfWarcraftSpecializations/types";
 
 interface SpecializationDropdownItemProps {
   specialization: Specialization;

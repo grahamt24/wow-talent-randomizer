@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { ClassButtonProps } from "./types";
 import styled from "@emotion/styled";
-import { ClassColors } from "../../styles/classColors";
+import { ClassColors } from "../../../styles/classColors";
 
 const ClassButton = styled(ButtonBase, {
   shouldForwardProp: (propName) => propName !== "classImage",

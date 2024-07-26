@@ -1,4 +1,4 @@
-import { Class } from "../../api/WorldOfWarcraftClasses/types";
+import { Class } from "../../../api/WorldOfWarcraftClasses/types";
 
 interface ClassProps {
   class: Class;
