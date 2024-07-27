@@ -25,7 +25,7 @@ function useFetchTalents(
     classTalents: [],
     specTalents: [],
   });
-  const fetchTalents = () => {
+  const fetchTalents = async () => {
     if (!classId || !specId) {
       setTalents({
         classTalents: [],
@@ -33,9 +33,27 @@ function useFetchTalents(
       });
       return;
     }
+    const {
+      spec_talent_nodes,
+      class_talent_nodes,
+      restriction_lines,
+      id,
+      hero_talent_trees,
+    } = talentTrees[classId][specId];
 
-    const { spec_talent_nodes, class_talent_nodes, restriction_lines, id } =
-      talentTrees[classId][specId];
+    // Filter out nodes present in hero_talent_trees
+    const filteredSpecTalents = spec_talent_nodes.filter(
+      (node) =>
+        !hero_talent_trees.some((heroTree) =>
+          heroTree.hero_talent_nodes.some((heroNode) => heroNode.id === node.id)
+        )
+    );
+    const filteredClassTalents = class_talent_nodes.filter(
+      (node) =>
+        !hero_talent_trees.some((heroTree) =>
+          heroTree.hero_talent_nodes.some((heroNode) => heroNode.id === node.id)
+        )
+    );
 
     let restrictions = restriction_lines;
     // for some reason, Evoker has display_row start at 4, so we need to account for that in restriction lines too
@@ -43,18 +61,18 @@ function useFetchTalents(
       restrictions = restriction_lines.map((restr) => {
         return {
           ...restr,
-          restricted_row: restr.restricted_row - 3
-        }
-      })
+          restricted_row: restr.restricted_row - 3,
+        };
+      });
     }
 
     const convertedClassTalents = convertTalentData(
-      class_talent_nodes,
+      filteredClassTalents,
       id,
       true
     );
     const convertedSpecTalents = convertTalentData(
-      spec_talent_nodes,
+      filteredSpecTalents,
       id,
       false
     );

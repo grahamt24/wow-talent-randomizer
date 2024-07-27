@@ -250,7 +250,7 @@ const CLASSES: Class[] = [
   },
   {
     id: 10,
-    talentTreeId: 781,
+    talentTreeId: 1000,
     name: "Monk",
     image: Monk,
     specs: [

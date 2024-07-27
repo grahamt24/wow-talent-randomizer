@@ -15,12 +15,19 @@ function isChoiceNode(node: ChoiceTalent | TalentRank): node is ChoiceTalent {
 function convertTalentData(
   talentData: TalentData[],
   id: number,
-  isClassTalent: boolean
+  isClassTalent: boolean,
 ): TalentNode[] {
   return talentData
     .map((talent) => {
       if (!talent.ranks || talent.ranks.length === 0) {
         // Skip this talent if ranks do not exist or are empty
+        return null;
+      }
+
+      if (
+        (talent.ranks[0] as ChoiceTalent).choice_of_tooltips === undefined &&
+        (talent.ranks[0] as TalentRank).tooltip === undefined
+      ) {
         return null;
       }
 
@@ -61,6 +68,9 @@ function convertTalentData(
       // for some reason, Evoker has display_row start at 4
       if (id === 872) {
         row = row - 3;
+      } else {
+        // everything else starts at 2 since TWW pre patch
+        row = row - 1;
       }
 
       const talentNode: TalentNode = {
