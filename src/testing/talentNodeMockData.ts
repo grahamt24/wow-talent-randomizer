@@ -17,6 +17,8 @@ const MOCK_TALENT_NODE: TalentNode = {
   choiceIndex: 1,
   choiceNode: false,
   isDefaultNode: false,
+  isHeroNode: false,
+  heroClassName: ""
 };
 
 

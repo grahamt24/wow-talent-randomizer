@@ -16,6 +16,8 @@ function convertTalentData(
   talentData: TalentData[],
   id: number,
   isClassTalent: boolean,
+  isHeroTalent: boolean,
+  specName?: string
 ): TalentNode[] {
   return talentData
     .map((talent) => {
@@ -68,8 +70,7 @@ function convertTalentData(
       // for some reason, Evoker has display_row start at 4
       if (id === 872) {
         row = row - 3;
-      } else {
-        // everything else starts at 2 since TWW pre patch
+      } else if (id !== 658) { // every class but mage has an extra row since TWW Pre Patch
         row = row - 1;
       }
 
@@ -89,6 +90,8 @@ function convertTalentData(
         choiceNode,
         choiceIndex,
         isDefaultNode,
+        isHeroNode: isHeroTalent,
+        heroClassName: specName || "",
       };
       return talentNode;
     })

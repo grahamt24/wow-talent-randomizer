@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 import { TalentTree } from "./TalentTree";
 import { useClassAndSpec } from "../../context/ClassAndSpec/useClassAndSpec";
-import { useTalentWeight } from "../../context/TalentWeight/useTalentWeight";
+import { useTalentTreeOptions } from "../../context/TalentTreeOptions/useTalentTreeOptions";
 import { useFetchTalents } from "../../api/hooks/useFetchTalents";
 import { MOCK_TALENT_NODE } from "../../testing/talentNodeMockData";
 import { Class } from "../../api/WorldOfWarcraftClasses/types";
@@ -14,8 +14,8 @@ import { Specialization } from "../../api/WorldOfWarcraftSpecializations/types";
 jest.mock("../../context/ClassAndSpec/useClassAndSpec");
 const useClassAndSpecMock = mocked(useClassAndSpec);
 
-jest.mock("../../context/TalentWeight/useTalentWeight");
-const useTalentWeightMock = mocked(useTalentWeight);
+jest.mock("../../context/TalentTreeOptions/useTalentTreeOptions");
+const useTalentTreeOptionsMock = mocked(useTalentTreeOptions);
 
 jest.mock("../../api/hooks/useFetchTalents");
 const useFetchTalentsMock = mocked(useFetchTalents);
@@ -52,9 +52,11 @@ describe("TalentTree Component", () => {
       setCurrentClass: jest.fn(),
       setCurrentSpec: jest.fn(),
     });
-    useTalentWeightMock.mockReturnValue({
+    useTalentTreeOptionsMock.mockReturnValue({
       talentWeight: "exponential",
       setTalentWeight: jest.fn(),
+      includeHeroTalents: false,
+      setIncludeHeroTalents: jest.fn(),
     });
     useFetchTalentsMock.mockReturnValue({
       classTalents: [
@@ -65,6 +67,7 @@ describe("TalentTree Component", () => {
         { ...MOCK_TALENT_NODE, id: 3, column: 3, unlocks: [4] },
         { ...MOCK_TALENT_NODE, id: 4, column: 3, row: 2, lockedBy: [3] },
       ],
+      heroTalents: [],
       rerandomize: mockRerandomize,
     });
   });
@@ -108,6 +111,7 @@ describe("TalentTree Component", () => {
     useFetchTalentsMock.mockReturnValue({
       classTalents: [],
       specTalents: [],
+      heroTalents: [],
       rerandomize: mockRerandomize,
     });
     render(<TalentTree />);

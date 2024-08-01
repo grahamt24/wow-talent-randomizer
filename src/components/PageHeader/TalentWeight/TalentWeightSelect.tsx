@@ -1,36 +1,40 @@
 import React from "react";
 import {
-  Select,
-  MenuItem,
-  SelectChangeEvent,
-  InputLabel,
   FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
-import { useTalentWeight } from "../../../context/TalentWeight/useTalentWeight";
-import { TalentWeightContextType } from "../../../context/TalentWeight/types";
+import { useTalentTreeOptions } from "../../../context/TalentTreeOptions/useTalentTreeOptions";
+import { TalentTreeOptionsContextType } from "../../../context/TalentTreeOptions/types";
 
 function TalentWeightSelect() {
-  const { talentWeight, setTalentWeight } = useTalentWeight();
-  const handleChange = (event: SelectChangeEvent) => {
+  const { talentWeight, setTalentWeight } = useTalentTreeOptions();
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
     setTalentWeight(
-      event.target.value as TalentWeightContextType["talentWeight"]
+      event.target.value as TalentTreeOptionsContextType["talentWeight"]
     );
   };
 
   return (
-    <FormControl sx={{ width: "25%" }}>
-      <InputLabel id="talent-weight-select-label">Talent Weight</InputLabel>
-      <Select
-        labelId="talent-weight-select-label"
-        id="talent-weight-select"
+    <FormControl sx={{ width: "35%", alignSelf: "center" }}>
+      <FormLabel id="talent-weight-label">
+        Talent Randomization Weight
+      </FormLabel>
+      <RadioGroup
+        aria-labelledby="talent-weight-label"
         value={talentWeight}
-        label="Talent Weight"
-        variant="outlined"
         onChange={handleChange}
       >
-        <MenuItem value="exponential">Exponential</MenuItem>
-        <MenuItem value="flat">Flat</MenuItem>
-      </Select>
+        <FormControlLabel
+          control={<Radio />}
+          label="Exponential"
+          value="exponential"
+        />
+        <FormControlLabel control={<Radio />} label="Flat" value="flat" />
+      </RadioGroup>
     </FormControl>
   );
 }

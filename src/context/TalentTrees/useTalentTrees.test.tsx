@@ -20,6 +20,7 @@ describe("useTalentTrees", () => {
             class_talent_nodes: [],
             spec_talent_nodes: [],
             restriction_lines: [],
+            hero_talent_trees: [],
             playable_class: {
               id: 1,
               name: "Death Knight",

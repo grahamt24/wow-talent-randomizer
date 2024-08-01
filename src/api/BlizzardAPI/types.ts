@@ -96,6 +96,8 @@ interface TalentNode {
   choiceNode: boolean;
   choiceIndex: number;
   isDefaultNode: boolean;
+  isHeroNode: boolean;
+  heroClassName: string;
 }
 
 interface Connections {
@@ -106,6 +108,7 @@ interface Connections {
 interface Talents {
   classTalents: TalentNode[];
   specTalents: TalentNode[];
+  heroTalents: TalentNode[];
 }
 
 export type {

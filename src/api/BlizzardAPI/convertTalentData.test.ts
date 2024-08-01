@@ -109,7 +109,7 @@ describe("convertTalentData", () => {
   ];
 
   it("should convert talent data correctly", () => {
-    const result = convertTalentData(mockTalentData, 1, true);
+    const result = convertTalentData(mockTalentData, 1, true, false);
 
     expect(result).toHaveLength(2); // Only 2 talents should be converted
     expect(result[0]).toEqual({
@@ -121,13 +121,15 @@ describe("convertTalentData", () => {
       rank: 2,
       lockedBy: [],
       unlocks: [],
-      row: 1,
+      row: 0,
       column: 1,
       spellId: 102,
       isClassTalent: true,
       choiceNode: false,
       choiceIndex: 0,
       isDefaultNode: true,
+      isHeroNode: false,
+      heroClassName: "",
     });
     expect(result[1]).toEqual({
       id: 3,
@@ -138,18 +140,20 @@ describe("convertTalentData", () => {
       rank: 0,
       lockedBy: [],
       unlocks: [],
-      row: 1,
+      row: 0,
       column: 3,
       spellId: 103,
       isClassTalent: true,
       choiceNode: false,
       choiceIndex: 0,
       isDefaultNode: false,
+      isHeroNode: false,
+      heroClassName: "",
     });
   });
 
   it("should return an empty array if no valid talents are provided", () => {
-    const result = convertTalentData([], 1, true);
+    const result = convertTalentData([], 1, true, false);
     expect(result).toEqual([]);
   });
 
@@ -193,7 +197,7 @@ describe("convertTalentData", () => {
       },
     ];
 
-    const result = convertTalentData(choiceTalentData, 1, false);
+    const result = convertTalentData(choiceTalentData, 1, false, false);
 
     expect(result).toHaveLength(1);
     expect(result[0]).toEqual({
@@ -205,13 +209,15 @@ describe("convertTalentData", () => {
       rank: 0,
       lockedBy: [],
       unlocks: [],
-      row: 1,
+      row: 0,
       column: 1,
       spellId: 202,
       isClassTalent: false,
       choiceNode: true,
       choiceIndex: 1,
       isDefaultNode: false,
+      isHeroNode: false,
+      heroClassName: "",
     })
     jest.spyOn(global.Math, "random").mockRestore();
   });

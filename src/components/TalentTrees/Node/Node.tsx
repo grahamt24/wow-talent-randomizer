@@ -16,7 +16,7 @@ function Node(props: NodeProps) {
   useEffect(() => {
     getNodeImage(
       props.className,
-      props.specName,
+      props.node.isHeroNode ? props.node.heroClassName : props.specName,
       props.node.spellId.toString(),
       props.node.isClassTalent
     )

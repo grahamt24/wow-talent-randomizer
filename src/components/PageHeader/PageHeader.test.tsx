@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { PageHeader } from "./PageHeader";
 import { CLASSES } from "../../api/WorldOfWarcraftClasses/constants";
-import { TalentWeightContextProvider } from "../../context/TalentWeight/TalentWeightContext";
+import { TalentWeightContextProvider } from "../../context/TalentTreeOptions/TalentTreeOptionsContext";
 import { ClassAndSpecContextProvider } from "../../context/ClassAndSpec/ClassAndSpecContext";
 
 describe("PageHeader", () => {
@@ -16,7 +16,10 @@ describe("PageHeader", () => {
     });
 
     expect(
-      screen.getByRole("combobox", { name: /Talent Weight/i })
+      screen.getByRole("radio", { name: /Exponential/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("radio", { name: /Flat/i })
     ).toBeInTheDocument();
 
     CLASSES.forEach((c) => {
