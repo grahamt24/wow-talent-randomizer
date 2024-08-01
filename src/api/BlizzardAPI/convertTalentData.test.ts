@@ -109,7 +109,10 @@ describe("convertTalentData", () => {
   ];
 
   it("should convert talent data correctly", () => {
-    const result = convertTalentData(mockTalentData, 1, true, false);
+    const result = convertTalentData(mockTalentData, 1, true, false, {
+      name: "Test",
+      id: 2,
+    });
 
     expect(result).toHaveLength(2); // Only 2 talents should be converted
     expect(result[0]).toEqual({
@@ -129,7 +132,7 @@ describe("convertTalentData", () => {
       choiceIndex: 0,
       isDefaultNode: true,
       isHeroNode: false,
-      heroClassName: "",
+      heroClassName: "Test",
     });
     expect(result[1]).toEqual({
       id: 3,
@@ -148,12 +151,15 @@ describe("convertTalentData", () => {
       choiceIndex: 0,
       isDefaultNode: false,
       isHeroNode: false,
-      heroClassName: "",
+      heroClassName: "Test",
     });
   });
 
   it("should return an empty array if no valid talents are provided", () => {
-    const result = convertTalentData([], 1, true, false);
+    const result = convertTalentData([], 1, true, false, {
+      name: "Test",
+      id: 2,
+    });
     expect(result).toEqual([]);
   });
 
@@ -197,7 +203,10 @@ describe("convertTalentData", () => {
       },
     ];
 
-    const result = convertTalentData(choiceTalentData, 1, false, false);
+    const result = convertTalentData(choiceTalentData, 1, false, false, {
+      name: "Test",
+      id: 2,
+    });
 
     expect(result).toHaveLength(1);
     expect(result[0]).toEqual({
@@ -217,8 +226,8 @@ describe("convertTalentData", () => {
       choiceIndex: 1,
       isDefaultNode: false,
       isHeroNode: false,
-      heroClassName: "",
-    })
+      heroClassName: "Test",
+    });
     jest.spyOn(global.Math, "random").mockRestore();
   });
 });
