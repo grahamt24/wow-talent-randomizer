@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from "react";
-import Grid from "@mui/material/Unstable_Grid2";
+import React, { useEffect } from "react";
 import { useFetchTalents } from "../../api/hooks/useFetchTalents";
-import { Arrow } from "./Arrow/Arrow";
-import { Button } from "@mui/material";
+import { Button, Tooltip, Typography } from "@mui/material";
 import Shuffle from "@mui/icons-material/Shuffle";
 import { useClassAndSpec } from "../../context/ClassAndSpec/useClassAndSpec";
 import { useTalentTreeOptions } from "../../context/TalentTreeOptions/useTalentTreeOptions";
-import { Node } from "./Node/Node";
 import {
   AlertWrapper,
   ButtonWrapper,
+  HeroClassImage,
+  HeroClassWrapper,
   StyledAlert,
-  TalentGrid,
   TalentTreeWrapper,
 } from "./styles";
-import { buildGrid, getMaxColumnAndRow } from "./utils";
+import { buildGrid, getHeroTreeIcon, getMaxAndMinColumnAndRow } from "./utils";
 import { TalentTreeLoading } from "./TalentTreeLoading/TalentTreeLoading";
+import { Tree } from "./Tree/Tree";
 // import { exportTalentTree } from "../../utils/exportTalentTree";
 
 function TalentTree() {
@@ -29,30 +28,10 @@ function TalentTree() {
       includeHeroTalents
     );
 
-  const [cellDimensions, setCellDimensions] = useState({ width: 0, height: 0 });
-  const measureRef = (node: HTMLDivElement) => {
-    if (node !== null) {
-      const { offsetWidth, offsetHeight } = node;
-      if (
-        cellDimensions.width !== offsetWidth ||
-        cellDimensions.height !== offsetHeight
-      ) {
-        setCellDimensions({ width: offsetWidth, height: offsetHeight });
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (currentClass && currentSpec) {
-      setCellDimensions({ width: 0, height: 0 });
-    }
-  }, [currentClass, currentSpec]);
-
   useEffect(() => {
     if (includeHeroTalents) {
       rerandomize();
     }
-    setCellDimensions({ width: 0, height: 0 });
   }, [includeHeroTalents]);
 
   if (!currentClass || !currentSpec) {
@@ -73,26 +52,56 @@ function TalentTree() {
     return <TalentTreeLoading />;
   }
 
-  const sortedHeroTalents = heroTalents.sort((a, b) => {
-    if (a.row === b.row) {
-      return a.column - b.column; // Sort by column if rows are equal
-    }
-    return a.row - b.row; // Sort by row
-  });
-
-  const maxColAndRow = getMaxColumnAndRow([classTalents, specTalents]);
-  const { grid, connections } = buildGrid(
-    maxColAndRow.maxRow,
-    maxColAndRow.maxColumn,
-    [classTalents, specTalents, sortedHeroTalents]
+  const classGridDimensions = getMaxAndMinColumnAndRow(classTalents);
+  const { grid: classGrid, connections: classConnections } = buildGrid(
+    classGridDimensions,
+    classTalents
   );
+
+  const specGridDimensions = getMaxAndMinColumnAndRow(specTalents);
+  const { grid: specGrid, connections: specConnections } = buildGrid(
+    specGridDimensions,
+    specTalents
+  );
+
+  const renderHeroTree = () => {
+    const heroGridDimensions = getMaxAndMinColumnAndRow(heroTalents);
+    const { grid: heroGrid, connections: heroConnections } = buildGrid(
+      heroGridDimensions,
+      heroTalents
+    );
+
+    const heroClassName = heroTalents[0].heroClassName;
+
+    return (
+      <HeroClassWrapper>
+        <Tooltip
+          title={<Typography variant="body1">{heroClassName}</Typography>}
+        >
+          <HeroClassImage
+            src={getHeroTreeIcon(currentClass.name, heroClassName)}
+            alt={heroClassName}
+          />
+        </Tooltip>
+        <Tree
+          grid={heroGrid}
+          connections={heroConnections}
+          dimensions={heroGridDimensions}
+          currentClass={currentClass}
+          currentSpec={currentSpec}
+        />
+      </HeroClassWrapper>
+    );
+  };
 
   return (
     <>
       <ButtonWrapper>
         <Button
           variant="contained"
-          onClick={() => rerandomize()}
+          onClick={() => {
+            rerandomize();
+          }}
           startIcon={<Shuffle />}
         >
           Re-randomize Talents
@@ -108,52 +117,21 @@ function TalentTree() {
         </Button> */}
       </ButtonWrapper>
       <TalentTreeWrapper talentBackground={currentSpec.talentBackground}>
-        <TalentGrid container columns={maxColAndRow.maxColumn}>
-          {grid.map((row) => {
-            return row.map((col, ind) => {
-              if (typeof col === "number") {
-                return (
-                  <Grid
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    key={`class_${col}${ind}`}
-                    xs={1}
-                  >
-                    <div></div>
-                  </Grid>
-                );
-              }
-              return (
-                <Grid
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  key={`class_${col.id}`}
-                  xs={1}
-                  ref={measureRef}
-                >
-                  <Node
-                    node={col}
-                    className={currentClass.name}
-                    specName={currentSpec.name}
-                  />
-                </Grid>
-              );
-            });
-          })}
-          {connections.map((connection, index) => {
-            return (
-              <Arrow
-                key={index}
-                from={connection.from}
-                to={connection.to}
-                gridCellHeight={cellDimensions.height}
-                gridCellWidth={cellDimensions.width}
-              />
-            );
-          })}
-        </TalentGrid>
+        <Tree
+          grid={classGrid}
+          connections={classConnections}
+          dimensions={classGridDimensions}
+          currentClass={currentClass}
+          currentSpec={currentSpec}
+        />
+        {includeHeroTalents && renderHeroTree()}
+        <Tree
+          grid={specGrid}
+          connections={specConnections}
+          dimensions={specGridDimensions}
+          currentClass={currentClass}
+          currentSpec={currentSpec}
+        />
       </TalentTreeWrapper>
     </>
   );

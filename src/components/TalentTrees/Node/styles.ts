@@ -9,9 +9,9 @@ const MissingPointsButton = styled(ButtonBase, {
   && {
     background-image: url(${(props) => props.nodeImage});
     background-repeat: no-repeat;
-    background-size: 50px;
-    height: 50px;
-    width: 50px;
+    background-size: 40px;
+    height: 40px;
+    width: 40px;
     ${({ passive }) => (passive ? "border-radius: 50%" : "")};
     justify-content: flex-end;
     align-items: flex-end;
@@ -30,9 +30,9 @@ const SelectedTalentButton = styled(ButtonBase, {
   && {
     background-image: url(${(props) => props.nodeImage});
     background-repeat: no-repeat;
-    background-size: 50px;
-    height: 50px;
-    width: 50px;
+    background-size: 40px;
+    height: 40px;
+    width: 40px;
     ${({ passive }) => (passive ? "border-radius: 50%" : "")};
     justify-content: flex-end;
     align-items: flex-end;
@@ -43,7 +43,7 @@ const SelectedTalentButton = styled(ButtonBase, {
 `;
 
 const NotMaxRankPointsSpan = styled.span`
-  font-size: 10px;
+  font-size: 8px;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   background-color: black;
   color: white;
@@ -51,7 +51,7 @@ const NotMaxRankPointsSpan = styled.span`
 `;
 
 const MaxRankPointsSpan = styled.span`
-  font-size: 10px;
+  font-size: 8px;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   background-color: black;
   color: white;

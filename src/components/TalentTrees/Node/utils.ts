@@ -1,15 +1,15 @@
-async function getNodeImage(
+function getNodeImage(
   className: string,
   specName: string,
   spellId: string,
   isClassTalent: boolean
-): Promise<string> {
-  const image = await import(
+) {
+  return new URL(
     `../../../assets/${className}/talents/${
-      isClassTalent ? "class" : `${specName}`
-    }/${spellId}.jpg`
-  );
-  return image.default;
+      isClassTalent ? "class" : specName
+    }/${spellId}.jpg`,
+    import.meta.url
+  ).href;
 }
 
 export { getNodeImage };

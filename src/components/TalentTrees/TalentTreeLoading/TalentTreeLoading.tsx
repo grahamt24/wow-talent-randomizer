@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Skeleton } from "@mui/material";
-import { TalentTreeWrapper, TalentGrid } from "../styles";
+import { TalentTreeWrapper, TalentGrid } from "./styles";
 import { DUMMY_CLASS_GRID, DUMMY_SPEC_GRID } from "./constants";
 
 function TalentTreeLoading() {

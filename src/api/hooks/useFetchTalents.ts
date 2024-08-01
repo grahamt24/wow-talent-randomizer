@@ -87,14 +87,14 @@ function useFetchTalents(
       id,
       true,
       false,
-      playable_specialization.name
+      playable_specialization
     );
     const convertedSpecTalents = convertTalentData(
       filteredSpecTalents,
       id,
       false,
       false,
-      playable_specialization.name
+      playable_specialization
     );
     const selectedHeroTalentTree = heroTrees[Math.floor(Math.random() * 2)];
     const convertedHeroTalents = convertTalentData(
@@ -102,9 +102,12 @@ function useFetchTalents(
       id,
       false,
       true,
-      selectedHeroTalentTree.name
-        .replace(/[<>:"/\\|?*]/g, "") // Remove invalid characters
-        .replace(/'/g, "") // Remove apostrophes
+      {
+        ...playable_specialization,
+        name: selectedHeroTalentTree.name
+          .replace(/[<>:"/\\|?*]/g, "") // Remove invalid characters
+          .replace(/'/g, ""), // Remove apostrophes}
+      }
     );
 
     const randomizedClassTalents = randomizeTalents(

@@ -9,4 +9,11 @@ interface GridAndConnections {
   connections: Connections[];
 }
 
-export type { TalentTreeWrapperProps, GridAndConnections };
+interface MinAndMaxColumnAndRows {
+  maxRow: number;
+  minRow: number;
+  maxColumn: number;
+  minColumn: number;
+}
+
+export type { TalentTreeWrapperProps, GridAndConnections, MinAndMaxColumnAndRows };

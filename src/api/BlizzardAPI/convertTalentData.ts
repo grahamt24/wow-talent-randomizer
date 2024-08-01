@@ -1,4 +1,4 @@
-import { ChoiceTalent, TalentData, TalentNode, TalentRank } from "./types";
+import { ChoiceTalent, PlayableSpecialization, TalentData, TalentNode, TalentRank } from "./types";
 
 function isChoiceNode(node: ChoiceTalent | TalentRank): node is ChoiceTalent {
   return (node as ChoiceTalent).choice_of_tooltips !== undefined;
@@ -17,7 +17,7 @@ function convertTalentData(
   id: number,
   isClassTalent: boolean,
   isHeroTalent: boolean,
-  specName?: string
+  specialization: PlayableSpecialization
 ): TalentNode[] {
   return talentData
     .map((talent) => {
@@ -67,10 +67,42 @@ function convertTalentData(
         }
       }
 
+      // Druid specific logic -- For some reaosn moonkin form is included but it's not a talent...
+      if (id === 793) {
+        if (name === "Moonkin Form") {
+          return null;
+        }
+
+        // Starfire has 2 talents returned for Feral/Guardian, but only 91044 is the one that has the correct data...
+        if ((specialization.id === 103 || specialization.id === 104) && talent.id === 91046) {
+          return null;
+        }
+      }
+
+      // Evoker specific - for some reason the Mass Eruption/Mass Disintegrate is included in both the trees for Devastation/Augmentation
+      // so we want to not include that one for the other spec
+      if (id === 872) {
+        if (specialization.id === 1467 && name === "Mass Eruption") {
+          return null;
+        }
+
+        if (specialization.id === 1473 && name === "Mass Disintegrate") {
+          return null;
+        }
+      }
+
+      // Mage Specific logic -- for some reason, Frost mages have a spec specific talent included in their class talents...
+      if (id === 658) {
+        if (specialization.id === 64 && isClassTalent && talent.id === 62162) {
+          return null;
+        }
+      }
+
       // for some reason, Evoker has display_row start at 4
       if (id === 872) {
         row = row - 3;
-      } else if (id !== 658) { // every class but mage has an extra row since TWW Pre Patch
+      } else if (id !== 658) {
+        // every class but mage has an extra row since TWW Pre Patch
         row = row - 1;
       }
 
@@ -91,7 +123,7 @@ function convertTalentData(
         choiceIndex,
         isDefaultNode,
         isHeroNode: isHeroTalent,
-        heroClassName: specName || "",
+        heroClassName: specialization.name || "",
       };
       return talentNode;
     })

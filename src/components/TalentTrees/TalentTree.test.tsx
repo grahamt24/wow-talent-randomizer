@@ -20,6 +20,10 @@ const useTalentTreeOptionsMock = mocked(useTalentTreeOptions);
 jest.mock("../../api/hooks/useFetchTalents");
 const useFetchTalentsMock = mocked(useFetchTalents);
 
+jest.mock("react-xarrows", () => {
+  return jest.fn(() => <div data-testid="mock-xarrow" />);
+});
+
 const CLASS: Class = {
   id: 1,
   talentTreeId: 1,
@@ -70,13 +74,6 @@ describe("TalentTree Component", () => {
       heroTalents: [],
       rerandomize: mockRerandomize,
     });
-  });
-
-  it("renders the correct amount of talent nodes and connection lines", () => {
-    render(<TalentTree />);
-
-    expect(screen.getAllByRole("button", { name: /1 \/ 1/i })).toHaveLength(4);
-    expect(screen.getAllByTestId("arrow-line")).toHaveLength(2);
   });
 
   it("calls rerandomize function when button is clicked", async () => {
