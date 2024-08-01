@@ -4,8 +4,7 @@ import { TalentTrees } from "../context/TalentTrees/types";
 /**
  * See https://github.com/tomrus88/BlizzardInterfaceCode/blob/master/Interface/AddOns/Blizzard_PlayerSpells/ClassTalents/Blizzard_ClassTalentImportExport.lua
  * This comment explains how the base64 string is constructed for exporting talents
- * As of 7/25/2024, this is not working and will be hard to test functionality until Blizzard API gets updated. Plans to update and verify functionality once
- * we get The War Within talent trees in the Blizzard API.
+ * As of 7/30/2024, this is not working and I'm not sure how to get it to work. I've tried lots of debugging and reverse engineering but I can't figure it out.
  */
 async function exportTalentTree(
   talentNodes: TalentNode[],
@@ -14,10 +13,11 @@ async function exportTalentTree(
   const bitStream: number[] = [];
 
   // HEADER
-  const serializationVersion = 2; // Taken from wowhead's code. The GetLoadoutSerializationVersion Blizz uses says it's 2, but 2 gives an error when attempting to import
+  const serializationVersion = 8; // Taken from wowhead's code. The GetLoadoutSerializationVersion Blizz uses says it's 2, but 2 gives an error when attempting to import
   bitStream.push(...toBits(serializationVersion, 8));
   bitStream.push(...toBits(specializationId, 16));
   bitStream.push(...Array(128).fill(0));
+  console.log(bitsToBytes(bitStream));
 
   // FILE CONTENT
   const allTalentTrees = getTree(specializationId);
@@ -49,6 +49,8 @@ async function exportTalentTree(
   // Convert bit stream to byte array
   const byteArray = bitsToBytes(bitStream);
   console.log(byteArray);
+
+  console.log(btoa(String.fromCharCode(...byteArray)));
 
   // Convert byte array to base64 string
   return btoa(String.fromCharCode(...byteArray));
@@ -94,10 +96,17 @@ function getTree(specId: number) {
 }
 
 function toBits(value: number, bitSize: number): number[] {
-  const bits = [];
-  for (let i = bitSize - 1; i >= 0; i--) {
-    bits.push((value >> i) & 1);
+  const bits: number[] = [];
+  const valString = (value >>> 0).toString(2);
+  const chars = valString.split("");
+  if (chars.length !== bitSize) {
+    for (let i = 0; i < Math.abs(bitSize - chars.length); i++) {
+      bits.push(0);
+    }
   }
+  chars.forEach((char) => {
+    bits.push(parseInt(char, 2));
+  });
   return bits;
 }
 
@@ -105,25 +114,8 @@ function bitsToBytes(bits: number[]): number[] {
   const bytes = [];
   let i = 0;
 
-  // First byte (8 bits)
-  let byte = 0;
-  for (let j = 0; j < 8; j++) {
-    byte = (byte << 1) | (bits[i + j] || 0);
-  }
-  bytes.push(byte);
-  i += 8;
-
-  // Second byte (16 bits)
-  let byte16 = 0;
-  for (let j = 0; j < 16; j++) {
-    byte16 = (byte16 << 1) | (bits[i + j] || 0);
-  }
-  bytes.push(byte16);
-  i += 16;
-
-  // Remaining bytes (8 bits each)
   while (i < bits.length) {
-    byte = 0;
+    let byte = 0;
     for (let j = 0; j < 8; j++) {
       byte = (byte << 1) | (bits[i + j] || 0);
     }

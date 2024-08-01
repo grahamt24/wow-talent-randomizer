@@ -9,9 +9,9 @@ const ClassListWrapper = styled.div`
   max-height: 100px;
 `;
 
-const SelectWrapper = styled.div`
+const TalentTreeOptionsWrapper = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
 `;
 
-export { ClassListWrapper, SelectWrapper };
+export { ClassListWrapper, TalentTreeOptionsWrapper };

@@ -14,6 +14,14 @@ interface PlayableSpecialization {
   name: string;
 }
 
+interface HeroTrees {
+  hero_talent_nodes: TalentData[];
+  name: string;
+  id: number;
+  playable_class: PlayableClass;
+  playable_specializations: [PlayableSpecialization, PlayableSpecialization];
+}
+
 interface ResponseData {
   class_talent_nodes: TalentData[];
   spec_talent_nodes: TalentData[];
@@ -21,6 +29,7 @@ interface ResponseData {
   id: number;
   playable_class: PlayableClass;
   playable_specialization: PlayableSpecialization;
+  hero_talent_trees: HeroTrees[];
 }
 
 interface Tooltip {
@@ -87,6 +96,8 @@ interface TalentNode {
   choiceNode: boolean;
   choiceIndex: number;
   isDefaultNode: boolean;
+  isHeroNode: boolean;
+  heroClassName: string;
 }
 
 interface Connections {
@@ -97,6 +108,7 @@ interface Connections {
 interface Talents {
   classTalents: TalentNode[];
   specTalents: TalentNode[];
+  heroTalents: TalentNode[];
 }
 
 export type {

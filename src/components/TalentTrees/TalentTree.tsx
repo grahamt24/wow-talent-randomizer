@@ -5,7 +5,7 @@ import { Arrow } from "./Arrow/Arrow";
 import { Button } from "@mui/material";
 import Shuffle from "@mui/icons-material/Shuffle";
 import { useClassAndSpec } from "../../context/ClassAndSpec/useClassAndSpec";
-import { useTalentWeight } from "../../context/TalentWeight/useTalentWeight";
+import { useTalentTreeOptions } from "../../context/TalentTreeOptions/useTalentTreeOptions";
 import { Node } from "./Node/Node";
 import {
   AlertWrapper,
@@ -16,15 +16,18 @@ import {
 } from "./styles";
 import { buildGrid, getMaxColumnAndRow } from "./utils";
 import { TalentTreeLoading } from "./TalentTreeLoading/TalentTreeLoading";
+// import { exportTalentTree } from "../../utils/exportTalentTree";
 
 function TalentTree() {
   const { currentClass, currentSpec } = useClassAndSpec();
-  const { talentWeight } = useTalentWeight();
-  const { classTalents, specTalents, rerandomize } = useFetchTalents(
-    currentClass?.id,
-    currentSpec?.id,
-    talentWeight
-  );
+  const { talentWeight, includeHeroTalents } = useTalentTreeOptions();
+  const { classTalents, specTalents, heroTalents, rerandomize } =
+    useFetchTalents(
+      currentClass?.id,
+      currentSpec?.id,
+      talentWeight,
+      includeHeroTalents
+    );
 
   const [cellDimensions, setCellDimensions] = useState({ width: 0, height: 0 });
   const measureRef = (node: HTMLDivElement) => {
@@ -40,8 +43,17 @@ function TalentTree() {
   };
 
   useEffect(() => {
-    setCellDimensions({ width: 0, height: 0 });
+    if (currentClass && currentSpec) {
+      setCellDimensions({ width: 0, height: 0 });
+    }
   }, [currentClass, currentSpec]);
+
+  useEffect(() => {
+    if (includeHeroTalents) {
+      rerandomize();
+    }
+    setCellDimensions({ width: 0, height: 0 });
+  }, [includeHeroTalents]);
 
   if (!currentClass || !currentSpec) {
     return (
@@ -53,15 +65,26 @@ function TalentTree() {
     );
   }
 
-  if (classTalents.length === 0 || specTalents.length === 0) {
+  if (
+    classTalents.length === 0 ||
+    specTalents.length === 0 ||
+    (includeHeroTalents && heroTalents.length === 0)
+  ) {
     return <TalentTreeLoading />;
   }
+
+  const sortedHeroTalents = heroTalents.sort((a, b) => {
+    if (a.row === b.row) {
+      return a.column - b.column; // Sort by column if rows are equal
+    }
+    return a.row - b.row; // Sort by row
+  });
 
   const maxColAndRow = getMaxColumnAndRow([classTalents, specTalents]);
   const { grid, connections } = buildGrid(
     maxColAndRow.maxRow,
     maxColAndRow.maxColumn,
-    [classTalents, specTalents]
+    [classTalents, specTalents, sortedHeroTalents]
   );
 
   return (
@@ -74,7 +97,15 @@ function TalentTree() {
         >
           Re-randomize Talents
         </Button>
-        {/** TODO: Add export button and finish up export talent logic */}
+        {/* <Button
+          variant="contained"
+          onClick={() =>
+            exportTalentTree([...classTalents, ...specTalents], currentSpec.id)
+          }
+          startIcon={<Shuffle />}
+        >
+          Export Talents
+        </Button> */}
       </ButtonWrapper>
       <TalentTreeWrapper talentBackground={currentSpec.talentBackground}>
         <TalentGrid container columns={maxColAndRow.maxColumn}>
