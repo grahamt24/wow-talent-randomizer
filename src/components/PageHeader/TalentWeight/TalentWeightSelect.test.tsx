@@ -50,4 +50,28 @@ describe("TalentWeightSelect", () => {
       MOCK_USE_TALENT_TREE_OPTIONS_RETURN.setTalentWeight
     ).toHaveBeenCalledWith("flat");
   });
+
+  it("should have informational tooltip on hover of exponential button", async () => {
+    const user = userEvent.setup();
+    renderWithProvider();
+
+    await user.hover(screen.getByRole("radio", { name: /exponential/i }));
+
+    const tooltip = await screen.findByRole("tooltip");
+    expect(tooltip).toHaveTextContent(
+      "This setting will put more weight on nodes further down the tree so they are more likely to be selected as they become available."
+    );
+  });
+
+  it("should have informational tooltip on hover of flat button", async () => {
+    const user = userEvent.setup();
+    renderWithProvider();
+
+    await user.hover(screen.getByRole("radio", { name: /flat/i }));
+
+    const tooltip = await screen.findByRole("tooltip");
+    expect(tooltip).toHaveTextContent(
+      "This setting will make all talents have an equal chance to be selected, regardless of location in the tree."
+    );
+  });
 });

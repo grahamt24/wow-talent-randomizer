@@ -3,6 +3,7 @@ import { Specialization } from "../../../../api/WorldOfWarcraftSpecializations/t
 interface SpecializationDropdownItemProps {
   specialization: Specialization;
   onClick: (spec: Specialization) => () => void;
+  autoFocus?: boolean;
 }
 
 export type { SpecializationDropdownItemProps };

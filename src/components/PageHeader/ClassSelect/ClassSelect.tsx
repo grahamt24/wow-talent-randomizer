@@ -57,12 +57,13 @@ function ClassSelect(props: ClassProps) {
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         transformOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        {currentClassSpecs.map((specialization) => {
+        {currentClassSpecs.map((specialization, index) => {
           return (
             <SpecializationDropdownItem
               onClick={handleClose}
               specialization={specialization}
               key={specialization.name}
+              autoFocus={index === 0 ? true : undefined}
             />
           );
         })}

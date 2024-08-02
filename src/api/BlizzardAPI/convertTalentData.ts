@@ -1,4 +1,10 @@
-import { ChoiceTalent, PlayableSpecialization, TalentData, TalentNode, TalentRank } from "./types";
+import {
+  ChoiceTalent,
+  PlayableSpecialization,
+  TalentData,
+  TalentNode,
+  TalentRank,
+} from "./types";
 
 function isChoiceNode(node: ChoiceTalent | TalentRank): node is ChoiceTalent {
   return (node as ChoiceTalent).choice_of_tooltips !== undefined;
@@ -74,7 +80,10 @@ function convertTalentData(
         }
 
         // Starfire has 2 talents returned for Feral/Guardian, but only 91044 is the one that has the correct data...
-        if ((specialization.id === 103 || specialization.id === 104) && talent.id === 91046) {
+        if (
+          (specialization.id === 103 || specialization.id === 104) &&
+          talent.id === 91046
+        ) {
           return null;
         }
       }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useFetchTalents } from "../../api/hooks/useFetchTalents";
 import { Button, Tooltip, Typography } from "@mui/material";
 import Shuffle from "@mui/icons-material/Shuffle";
@@ -28,12 +28,6 @@ function TalentTree() {
       includeHeroTalents
     );
 
-  useEffect(() => {
-    if (includeHeroTalents) {
-      rerandomize();
-    }
-  }, [includeHeroTalents]);
-
   if (!currentClass || !currentSpec) {
     return (
       <AlertWrapper>
@@ -44,11 +38,7 @@ function TalentTree() {
     );
   }
 
-  if (
-    classTalents.length === 0 ||
-    specTalents.length === 0 ||
-    (includeHeroTalents && heroTalents.length === 0)
-  ) {
+  if (classTalents.length === 0 || specTalents.length === 0) {
     return <TalentTreeLoading />;
   }
 
@@ -124,7 +114,7 @@ function TalentTree() {
           currentClass={currentClass}
           currentSpec={currentSpec}
         />
-        {includeHeroTalents && renderHeroTree()}
+        {includeHeroTalents && heroTalents.length > 0 && renderHeroTree()}
         <Tree
           grid={specGrid}
           connections={specConnections}

@@ -16,4 +16,8 @@ interface MinAndMaxColumnAndRows {
   minColumn: number;
 }
 
-export type { TalentTreeWrapperProps, GridAndConnections, MinAndMaxColumnAndRows };
+export type {
+  TalentTreeWrapperProps,
+  GridAndConnections,
+  MinAndMaxColumnAndRows,
+};

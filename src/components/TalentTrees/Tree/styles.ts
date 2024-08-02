@@ -7,4 +7,4 @@ const TalentGrid = styled(Grid)`
   flex: 2;
 `;
 
-export { TalentGrid }
+export { TalentGrid };
