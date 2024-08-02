@@ -5,6 +5,8 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import { useTalentTreeOptions } from "../../../context/TalentTreeOptions/useTalentTreeOptions";
 import { TalentTreeOptionsContextType } from "../../../context/TalentTreeOptions/types";
@@ -28,12 +30,30 @@ function TalentWeightSelect() {
         value={talentWeight}
         onChange={handleChange}
       >
-        <FormControlLabel
-          control={<Radio />}
-          label="Exponential"
-          value="exponential"
-        />
-        <FormControlLabel control={<Radio />} label="Flat" value="flat" />
+        <Tooltip
+          title={
+            <Typography variant="caption">
+              This setting will put more weight on nodes further down the tree
+              so they are more likely to be selected as they become available.
+            </Typography>
+          }
+        >
+          <FormControlLabel
+            control={<Radio />}
+            label="Exponential"
+            value="exponential"
+          />
+        </Tooltip>
+        <Tooltip
+          title={
+            <Typography variant="caption">
+              This setting will make all talents have an equal chance to be
+              selected, regardless of location in the tree.
+            </Typography>
+          }
+        >
+          <FormControlLabel control={<Radio />} label="Flat" value="flat" />
+        </Tooltip>
       </RadioGroup>
     </FormControl>
   );

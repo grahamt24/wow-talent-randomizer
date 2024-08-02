@@ -1,6 +1,6 @@
 import React from "react";
 import { useTalentTreeOptions } from "../../../context/TalentTreeOptions/useTalentTreeOptions";
-import { Switch, FormControlLabel } from "@mui/material";
+import { Switch, FormControlLabel, Tooltip, Typography } from "@mui/material";
 import { SwitchWrapper } from "./styles";
 
 function HeroNodeSwitch() {
@@ -14,13 +14,22 @@ function HeroNodeSwitch() {
 
   return (
     <SwitchWrapper>
-      <FormControlLabel
-        control={
-          <Switch checked={includeHeroTalents} onChange={handleChange} />
+      <Tooltip
+        title={
+          <Typography variant="caption">
+            One of the two available hero specializations for the selected class
+            and specialization will be randomly chosen.
+          </Typography>
         }
-        labelPlacement="top"
-        label="Include Hero Talents?"
-      />
+      >
+        <FormControlLabel
+          control={
+            <Switch checked={includeHeroTalents} onChange={handleChange} />
+          }
+          labelPlacement="top"
+          label="Include Hero Talents"
+        />
+      </Tooltip>
     </SwitchWrapper>
   );
 }

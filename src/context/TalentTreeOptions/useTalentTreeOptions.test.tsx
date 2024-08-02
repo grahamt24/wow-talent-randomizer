@@ -8,7 +8,9 @@ describe("useTalentTreeOptions", () => {
   it("should throw an error if used outside of TalentWeightProvider", () => {
     expect(() => {
       renderHook(() => useTalentTreeOptions());
-    }).toThrow("useTalentTreeOptions must be used within a TalentTreeOptionsProvider");
+    }).toThrow(
+      "useTalentTreeOptions must be used within a TalentTreeOptionsProvider"
+    );
   });
 
   it("should return context value when used within TalentTreeOptionsProvider", () => {

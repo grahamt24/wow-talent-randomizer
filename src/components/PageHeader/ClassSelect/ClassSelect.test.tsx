@@ -61,5 +61,5 @@ describe("ClassSelect", () => {
     const tooltip = await screen.findByRole("tooltip");
 
     expect(tooltip).toHaveTextContent(CLASSES[0].name);
-  })
+  });
 });

@@ -7,6 +7,7 @@ import { ClassAndSpecContextProvider } from "../../context/ClassAndSpec/ClassAnd
 import { TalentWeightContextProvider } from "../../context/TalentTreeOptions/TalentTreeOptionsContext";
 import { TalentTreesProvider } from "../../context/TalentTrees/TalentTrees";
 import { AppWrapper } from "./styles";
+import { Xwrapper } from "react-xarrows";
 
 const darkTheme = createTheme({
   palette: {
@@ -17,17 +18,19 @@ const darkTheme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={darkTheme}>
-        <TalentTreesProvider>
-          <ClassAndSpecContextProvider>
-            <TalentWeightContextProvider>
-              <CssBaseline />
-              <AppWrapper>
-                <PageHeader />
+      <TalentTreesProvider>
+        <ClassAndSpecContextProvider>
+          <TalentWeightContextProvider>
+            <CssBaseline />
+            <AppWrapper>
+              <PageHeader />
+              <Xwrapper>
                 <TalentTree />
-              </AppWrapper>
-            </TalentWeightContextProvider>
-          </ClassAndSpecContextProvider>
-        </TalentTreesProvider>
+              </Xwrapper>
+            </AppWrapper>
+          </TalentWeightContextProvider>
+        </ClassAndSpecContextProvider>
+      </TalentTreesProvider>
     </ThemeProvider>
   );
 }

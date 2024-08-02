@@ -5,10 +5,10 @@ import { MinAndMaxColumnAndRows } from "../types";
 
 interface TreeProps {
   dimensions: MinAndMaxColumnAndRows;
-  grid: Array<Array<number | TalentNode>>
+  grid: Array<Array<number | TalentNode>>;
   connections: Connections[];
   currentClass: Class;
   currentSpec: Specialization;
 }
 
-export type { TreeProps }
+export type { TreeProps };

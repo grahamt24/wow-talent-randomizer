@@ -18,9 +18,7 @@ describe("PageHeader", () => {
     expect(
       screen.getByRole("radio", { name: /Exponential/i })
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("radio", { name: /Flat/i })
-    ).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: /Flat/i })).toBeInTheDocument();
 
     CLASSES.forEach((c) => {
       expect(screen.getByRole("button", { name: c.name })).toBeInTheDocument();

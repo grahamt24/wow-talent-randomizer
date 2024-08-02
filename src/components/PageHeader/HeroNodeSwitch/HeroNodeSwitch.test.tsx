@@ -17,15 +17,38 @@ describe("HeroNodeSwitch", () => {
       talentWeight: "exponential",
       setTalentWeight: jest.fn(),
       includeHeroTalents: false,
-      setIncludeHeroTalents: mockSetIncludeHeroTalents
-    })
+      setIncludeHeroTalents: mockSetIncludeHeroTalents,
+    });
     const user = userEvent.setup();
     render(<HeroNodeSwitch />);
-    const switchElement = screen.getByRole("checkbox", { name: /Include Hero Talents?/i });
+    const switchElement = screen.getByRole("checkbox", {
+      name: /Include Hero Talents?/i,
+    });
 
     expect(switchElement).not.toBeChecked();
 
     await user.click(switchElement);
     expect(mockSetIncludeHeroTalents).toHaveBeenCalledWith(true);
+  });
+
+  it("should have an informational tooltip on hover", async () => {
+    const mockSetIncludeHeroTalents = jest.fn();
+    mockUseTalentTreeOptions.mockReturnValue({
+      talentWeight: "exponential",
+      setTalentWeight: jest.fn(),
+      includeHeroTalents: false,
+      setIncludeHeroTalents: mockSetIncludeHeroTalents,
+    });
+    const user = userEvent.setup();
+    render(<HeroNodeSwitch />);
+    const switchElement = screen.getByRole("checkbox", {
+      name: /Include Hero Talents?/i,
+    });
+
+    await user.hover(switchElement);
+    expect(await screen.findByRole("tooltip")).toBeInTheDocument();
+    expect(await screen.findByRole("tooltip")).toHaveTextContent(
+      "One of the two available hero specializations for the selected class and specialization will be randomly chosen."
+    );
   });
 });

@@ -18,8 +18,7 @@ const MOCK_TALENT_NODE: TalentNode = {
   choiceNode: false,
   isDefaultNode: false,
   isHeroNode: false,
-  heroClassName: ""
+  heroClassName: "",
 };
 
-
-export { MOCK_TALENT_NODE }
+export { MOCK_TALENT_NODE };

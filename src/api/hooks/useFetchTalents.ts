@@ -4,6 +4,7 @@ import { convertTalentData } from "../BlizzardAPI/convertTalentData";
 import { useTalentTrees } from "../../context/TalentTrees/useTalentTrees";
 import { TalentTreeOptionsContextType } from "../../context/TalentTreeOptions/types";
 import { useEffect, useState } from "react";
+import { useXarrow } from "react-xarrows";
 
 /**
  * Fetches and processes talents for a given class and specialization.
@@ -26,6 +27,8 @@ function useFetchTalents(
     specTalents: [],
     heroTalents: [],
   });
+  const updateXarrow = useXarrow();
+
   const fetchTalents = () => {
     if (!classId || !specId) {
       setTalents({
@@ -131,6 +134,7 @@ function useFetchTalents(
       };
     });
 
+    updateXarrow();
     setTalents({
       classTalents: randomizedClassTalents,
       specTalents: randomizedSpecTalents,
@@ -140,12 +144,10 @@ function useFetchTalents(
 
   useEffect(() => {
     fetchTalents();
-  }, [classId, specId, weighting]);
+  }, [classId, specId]);
 
   useEffect(() => {
-    if (includeHeroTalents) {
-      fetchTalents();
-    } else {
+    if (!includeHeroTalents) {
       setTalents({
         ...talents,
         heroTalents: [],
