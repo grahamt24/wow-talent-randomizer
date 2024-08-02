@@ -55,7 +55,7 @@ describe("TalentWeightSelect", () => {
     const user = userEvent.setup();
     renderWithProvider();
 
-    await user.hover(screen.getByRole("radio", { name: /exponential/i }));
+    await user.hover(screen.getByTestId("exponential-info-icon"));
 
     const tooltip = await screen.findByRole("tooltip");
     expect(tooltip).toHaveTextContent(
@@ -67,7 +67,7 @@ describe("TalentWeightSelect", () => {
     const user = userEvent.setup();
     renderWithProvider();
 
-    await user.hover(screen.getByRole("radio", { name: /flat/i }));
+    await user.hover(screen.getByTestId("flat-info-icon"));
 
     const tooltip = await screen.findByRole("tooltip");
     expect(tooltip).toHaveTextContent(

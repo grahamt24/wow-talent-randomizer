@@ -12,9 +12,15 @@ const config: JestConfigWithTsJest = {
         astTransformers: {
           before: [
             {
-              path: "ts-jest-mock-import-meta", // or, alternatively, 'ts-jest-mock-import-meta' directly, without node_modules.
+              path: "ts-jest-mock-import-meta",
               options: {
-                metaObjectReplacement: { url: "https://www.url.com" },
+                metaObjectReplacement: {
+                  url: "https://www.url.com",
+                  env: {
+                    BLIZZ_USERNAME: "username",
+                    BLIZZ_PASSWORD: "password",
+                  },
+                },
               },
             },
           ],

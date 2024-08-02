@@ -1,5 +1,8 @@
 import axios from "axios";
 
+const BLIZZ_USERNAME = import.meta.env.VITE_BLIZZ_USERNAME;
+const BLIZZ_PASSWORD = import.meta.env.VITE_BLIZZ_PASSWORD
+
 /**
  * Retrieves the OAuth Access Token for the Blizzard API
  * @returns Access Token for use in API calls to Blizzard
@@ -7,8 +10,8 @@ import axios from "axios";
 const retrieveAccessToken = async () => {
   const response = await axios.post("https://us.battle.net/oauth/token", null, {
     auth: {
-      username: "10a90bea178d4404bfa4d43d4c72ab53",
-      password: "f9Jq3ggDa9B3MH9d4kR8zqMK8UR6MNbV",
+      username: BLIZZ_USERNAME,
+      password: BLIZZ_PASSWORD,
     },
     params: {
       grant_type: "client_credentials",
