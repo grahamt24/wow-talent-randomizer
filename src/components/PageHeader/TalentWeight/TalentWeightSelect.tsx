@@ -37,6 +37,7 @@ function TalentWeightSelect() {
               so they are more likely to be selected as they become available.
             </Typography>
           }
+          placement="bottom-start"
         >
           <FormControlLabel
             control={<Radio />}
@@ -51,6 +52,7 @@ function TalentWeightSelect() {
               selected, regardless of location in the tree.
             </Typography>
           }
+          placement="bottom-start"
         >
           <FormControlLabel control={<Radio />} label="Flat" value="flat" />
         </Tooltip>
