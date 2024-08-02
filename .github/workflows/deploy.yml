@@ -21,6 +21,9 @@ jobs:
 
       - name: Build project
         run: npm run build
+        env:
+          VITE_BLIZZ_USERNAME: ${{ secrets.VITE_BLIZZ_USERNAME }}
+          VITE_BLIZZ_PASSWORD: ${{ secrets.VITE_BLIZZ_PASSWORD }}
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v4.3.4
