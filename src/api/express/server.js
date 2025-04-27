@@ -19,11 +19,10 @@ app.post("/download-image", async (req, res) => {
   try {
     const {
       data: { id, media },
-    } = await axios.get(`${url}&access_token=${accessToken}`);
-    const mediaUrl = `${media.key.href}&access_token=${accessToken}`;
+    } = await axios.get(url, { headers: { "Authorization": `Bearer ${accessToken}`}});
     const {
       data: { assets },
-    } = await axios.get(mediaUrl);
+    } = await axios.get(media.key.href, { headers: { "Authorization": `Bearer ${accessToken}`}});
     const fileUrl = assets[0].value;
     const dirPath = path.join(
       __dirname,

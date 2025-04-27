@@ -1,3 +1,4 @@
+// import { getAndDownloadImage } from "./getAndDownloadImage";
 import {
   ChoiceTalent,
   PlayableSpecialization,
@@ -23,7 +24,9 @@ function convertTalentData(
   id: number,
   isClassTalent: boolean,
   isHeroTalent: boolean,
-  specialization: PlayableSpecialization
+  specialization: PlayableSpecialization,
+  // className: string,
+  // accessToken: string
 ): TalentNode[] {
   return talentData
     .map((talent) => {
@@ -62,6 +65,7 @@ function convertTalentData(
         spellId = choiceTalent.spell_tooltip.spell.id;
         choiceNode = true;
         choiceIndex = ind;
+        // getAndDownloadImage(node.choice_of_tooltips[ind].spell_tooltip.spell.key.href, accessToken, className, specialization.name)
       } else {
         description = node.tooltip.spell_tooltip.description;
         name = node.tooltip.talent.name;
@@ -71,14 +75,11 @@ function convertTalentData(
           rank = node.default_points;
           isDefaultNode = true;
         }
+        // getAndDownloadImage(node.tooltip.spell_tooltip.spell.key.href, accessToken, className, specialization.name)
       }
 
       // Druid specific logic -- For some reaosn moonkin form is included but it's not a talent...
       if (id === 793) {
-        if (name === "Moonkin Form") {
-          return null;
-        }
-
         // Starfire has 2 talents returned for Feral/Guardian, but only 91044 is the one that has the correct data...
         if (
           (specialization.id === 103 || specialization.id === 104) &&
