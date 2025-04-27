@@ -22,8 +22,13 @@ const TalentTreesProvider = ({ children }: { children: React.ReactNode }) => {
         wowClass.specs.map((spec) =>
           axios.get<ResponseData>(
             encodeURI(
-              `https://us.api.blizzard.com/data/wow/talent-tree/${wowClass.talentTreeId}/playable-specialization/${spec.id}?namespace=static-us&locale=en_US&access_token=${accessToken}`
-            )
+              `https://us.api.blizzard.com/data/wow/talent-tree/${wowClass.talentTreeId}/playable-specialization/${spec.id}?namespace=static-us&locale=en_US`
+            ),
+            {
+              headers: {
+                "Authorization": `Bearer ${accessToken}`
+              }
+            }
           )
         )
       );
