@@ -5,8 +5,8 @@ import { useTalentTrees } from "../../context/TalentTrees/useTalentTrees";
 import { TalentTreeOptionsContextType } from "../../context/TalentTreeOptions/types";
 import { useEffect, useState } from "react";
 import { useXarrow } from "react-xarrows";
-// import { retrieveAccessToken } from "../BlizzardAPI/retrieveAccessToken";
-// import { CLASSES } from "../WorldOfWarcraftClasses/constants";
+import { retrieveAccessToken } from "../BlizzardAPI/retrieveAccessToken";
+import { CLASSES } from "../WorldOfWarcraftClasses/constants";
 
 /**
  * Fetches and processes talents for a given class and specialization.
@@ -87,8 +87,8 @@ function useFetchTalents(
       });
     }
 
-    // const accessToken = await retrieveAccessToken();
-    // const className = CLASSES.find((wowClass) => wowClass.id === classId)!.name;
+    const accessToken = await retrieveAccessToken();
+    const className = CLASSES.find((wowClass) => wowClass.id === classId)!.name;
 
     const convertedClassTalents = convertTalentData(
       filteredClassTalents,
@@ -96,8 +96,8 @@ function useFetchTalents(
       true,
       false,
       playable_specialization,
-      // className,
-      // accessToken
+      className,
+      accessToken
     );
     const convertedSpecTalents = convertTalentData(
       filteredSpecTalents,
@@ -105,8 +105,8 @@ function useFetchTalents(
       false,
       false,
       playable_specialization,
-      // className,
-      // accessToken
+      className,
+      accessToken
     );
     const selectedHeroTalentTree = heroTrees[Math.floor(Math.random() * 2)];
     const convertedHeroTalents = convertTalentData(
@@ -120,8 +120,8 @@ function useFetchTalents(
           .replace(/[<>:"/\\|?*]/g, "") // Remove invalid characters
           .replace(/'/g, ""), // Remove apostrophes
       },
-      // className,
-      // accessToken
+      className,
+      accessToken
     );
 
     const randomizedClassTalents = randomizeTalents(
